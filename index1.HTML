@@ -1,0 +1,1583 @@
+CONTINUA:<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelos de Servicios en la Nube | Guía Profesional</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --secondary-dark: #0d9488;
+            --tertiary: #ef4444;
+            --tertiary-dark: #dc2626;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --light: #f8fafc;
+            --light-gray: #e2e8f0;
+            --gray: #94a3b8;
+            --dark-gray: #64748b;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            
+            --rounded-sm: 0.125rem;
+            --rounded: 0.25rem;
+            --rounded-md: 0.375rem;
+            --rounded-lg: 0.5rem;
+            --rounded-xl: 0.75rem;
+            --rounded-2xl: 1rem;
+            --rounded-full: 9999px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        
+        .slide {
+            width: 100vw;
+            min-height: 100vh;
+            padding: 2rem;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            background-color: var(--light);
+        }
+        
+        .slide.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0.8; }
+            to { opacity: 1; }
+        }
+        
+        /* Header Styles */
+        .header {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: var(--rounded-xl);
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            pointer-events: none;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Section Styles */
+        section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        h2 {
+            color: var(--primary);
+            font-size: 1.75rem;
+            margin: 2rem 0 1.5rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        h3 {
+            color: var(--secondary-dark);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        h4 {
+            color: var(--dark);
+            font-size: 1.25rem;
+            margin: 1.25rem 0 0.75rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            color: var(--darker);
+        }
+        
+        strong {
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        /* Model Cards */
+        .model-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .model-card {
+            background: white;
+            border-radius: var(--rounded-xl);
+            padding: 1.75rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-top: 4px solid;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .model-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: currentColor;
+        }
+        
+        .model-card.iaas {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .model-card.paas {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .model-card.saas {
+            border-color: var(--tertiary);
+            color: var(--tertiary);
+        }
+        
+        .model-card img {
+            width: 100%;
+            max-height: 120px;
+            object-fit: contain;
+            margin-bottom: 1.5rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Responsabilidad compartida */
+        .responsibility-matrix {
+            width: 100%;
+            margin: 2rem 0;
+            border-radius: var(--rounded-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .responsibility-row {
+            display: flex;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .responsibility-row:first-child {
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .responsibility-row:last-child {
+            border-bottom: none;
+        }
+        
+        .responsibility-cell {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .responsibility-cell:first-child {
+            flex: 0 0 200px;
+            background-color: var(--light);
+            font-weight: 600;
+            text-align: left;
+        }
+        
+        .responsibility-row:first-child .responsibility-cell:first-child {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Arquitectura */
+        .architecture-diagram {
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: var(--rounded-xl);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .architecture-layer {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+        }
+        
+        .layer-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .layer-content {
+            display: flex;
+            height: 60px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--rounded);
+            overflow: hidden;
+        }
+        
+        .layer-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            padding: 0.5rem;
+        }
+        
+        /* Lists */
+        ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.25rem;
+        }
+        
+        li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            box-shadow: var(--shadow);
+            border-radius: var(--rounded-lg);
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: var(--light);
+        }
+        
+        tr:hover {
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        /* Example Grid */
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .example-item {
+            background: white;
+            padding: 1.25rem 0.75rem;
+            border-radius: var(--rounded-lg);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        
+        .example-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .example-item img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            margin: 0 auto 0.75rem;
+            display: block;
+            filter: grayscale(30%);
+            transition: filter 0.3s ease;
+        }
+        
+        .example-item:hover img {
+            filter: grayscale(0%);
+        }
+        
+        .example-item div {
+            font-size: 0.875rem;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+        
+        /* Phases */
+        .phase {
+            display: flex;
+            margin-bottom: 1.5rem;
+            background: white;
+            border-radius: var(--rounded-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .phase:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .phase-number {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.25rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+        }
+        
+        .phase-content {
+            padding: 1.25rem;
+            flex-grow: 1;
+        }
+        
+        /* Benefits */
+        .benefits-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .benefit-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--rounded-lg);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .benefit-card h3 {
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+        
+        /* Case Study */
+        .case-study {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--rounded-xl);
+            box-shadow: var(--shadow-lg);
+            margin: 2.5rem 0;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .case-study h3 {
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .case-study-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .case-study-item {
+            background: var(--light);
+            padding: 1.25rem;
+            border-radius: var(--rounded-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .case-study-item h4 {
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.125rem;
+        }
+        
+        /* FAQ */
+        .faq-container {
+            margin: 2rem 0;
+        }
+        
+        .faq-item {
+            margin-bottom: 1rem;
+            background: white;
+            border-radius: var(--rounded-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .faq-question {
+            padding: 1.25rem;
+            background: var(--light);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .faq-item.active .faq-question::after {
+            content: '-';
+        }
+        
+        .faq-answer {
+            padding: 0 1.25rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 0 1.25rem 1.25rem;
+            max-height: 500px;
+        }
+        
+        /* Quiz */
+        .quiz-container {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--rounded-xl);
+            box-shadow: var(--shadow-lg);
+            margin: 2rem 0;
+        }
+        
+        .quiz-question {
+            margin-bottom: 1.5rem;
+        }
+        
+        .quiz-options {
+            margin-left: 1.5rem;
+        }
+        
+        .quiz-option {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .quiz-option input {
+            margin-right: 0.75rem;
+        }
+        
+        .quiz-results {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: var(--rounded);
+            background: var(--light);
+            display: none;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Navigation */
+        .nav-buttons {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            gap: 0.75rem;
+            z-index: 100;
+        }
+        
+        .nav-button {
+            padding: 0.75rem 1.25rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--rounded-full);
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            box-shadow: var(--shadow-md);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .nav-button:active {
+            transform: translateY(0);
+        }
+        
+        /* Progress indicator */
+        .progress-container {
+            position: fixed;
+            bottom: 5rem;
+            right: 1.5rem;
+            background: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--rounded-full);
+            box-shadow: var(--shadow);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--dark);
+            z-index: 100;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 2rem 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            section {
+                padding: 0.5rem;
+            }
+            
+            .model-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .benefits-container, .case-study-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-buttons {
+                bottom: 1rem;
+                right: 1rem;
+            }
+            
+            .nav-button {
+                padding: 0.6rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            .responsibility-row {
+                flex-direction: column;
+            }
+            
+            .responsibility-cell {
+                flex: auto;
+                text-align: left;
+            }
+            
+            .responsibility-cell:first-child {
+                flex: auto;
+                background-color: var(--light-gray);
+            }
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Slide 1: Portada -->
+    <div class="slide active" id="slide1">
+        <div class="header">
+            <h1>Modelos de Servicios en la Nube</h1>
+            <p>IaaS, PaaS y SaaS - Guía Completa</p>
+        </div>
+    </div>
+    
+    <!-- Slide 2: Introducción -->
+    <div class="slide" id="slide2">
+        <section>
+            <h2>Introducción a los Modelos de Nube</h2>
+            <p>Los servicios en la nube se dividen en tres modelos principales según el nivel de control y responsabilidad del cliente. Cada modelo ofrece diferentes niveles de abstracción de la infraestructura subyacente, proporcionando flexibilidad y opciones para diversas necesidades empresariales.</p>
+            
+            <div class="architecture-diagram">
+                <div class="architecture-layer">
+                    <div class="layer-label">Modelo SaaS (Software como Servicio)</div>
+                    <div class="layer-content">
+                        <div class="layer-segment" style="background-color: var(--tertiary); flex: 1">Aplicaciones</div>
+                    </div>
+                </div>
+                <div class="architecture-layer">
+                    <div class="layer-label">Modelo PaaS (Plataforma como Servicio)</div>
+                    <div class="layer-content">
+                        <div class="layer-segment" style="background-color: var(--secondary); flex: 0.7">Middleware</div>
+                        <div class="layer-segment" style="background-color: var(--secondary-dark); flex: 0.3">Runtime</div>
+                    </div>
+                </div>
+                <div class="architecture-layer">
+                    <div class="layer-label">Modelo IaaS (Infraestructura como Servicio)</div>
+                    <div class="layer-content">
+                        <div class="layer-segment" style="background-color: var(--primary); flex: 0.4">Sistemas Operativos</div>
+                        <div class="layer-segment" style="background-color: var(--primary-dark); flex: 0.3">Virtualización</div>
+                        <div class="layer-segment" style="background-color: #1e40af; flex: 0.2">Servidores</div>
+                        <div class="layer-segment" style="background-color: #1e3a8a; flex: 0.1">Almacenamiento</div>
+                    </div>
+                </div>
+                <div class="architecture-layer">
+                    <div class="layer-label">Infraestructura Física</div>
+                    <div class="layer-content">
+                        <div class="layer-segment" style="background-color: var(--dark); flex: 1">Centros de Datos</div>
+                    </div>
+                </div>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Modelo</th>
+                        <th>Nivel de Control</th>
+                        <th>Responsabilidad del Usuario</th>
+                        <th>Responsabilidad del Proveedor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>IaaS</strong></td>
+                        <td>Alto (infraestructura)</td>
+                        <td>Sistemas operativos, aplicaciones, datos</td>
+                        <td>Hardware, virtualización, red física</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PaaS</strong></td>
+                        <td>Medio (aplicaciones)</td>
+                        <td>Aplicaciones y datos</td>
+                        <td>Sistemas operativos, middleware, runtime</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SaaS</strong></td>
+                        <td>Bajo (uso)</td>
+                        <td>Datos y configuración</td>
+                        <td>Toda la infraestructura y aplicación</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+    
+    <!-- Slide 3: IaaS -->
+    <div class="slide" id="slide3">
+        <section>
+            <h2>IaaS – Infraestructura como Servicio</h2>
+            <div class="model-card iaas">
+                <img src="https://cdn-icons-png.flaticon.com/512/2906/2906274.png" alt="IaaS" class="floating">
+                
+                <h3>Definición Técnica</h3>
+                <p>IaaS proporciona recursos de computación virtualizados a través de Internet. Los usuarios pueden aprovisionar y gestionar servidores virtuales (instancias), almacenamiento, redes y sistemas operativos, mientras que el proveedor gestiona la infraestructura física subyacente.</p>
+                
+                <h4>Características Clave:</h4>
+                <ul>
+                    <li><strong>Escalabilidad elástica:</strong> Capacidad de aumentar o reducir recursos según demanda</li>
+                    <li><strong>Autoservicio bajo demanda:</strong> Los usuarios pueden aprovisionar recursos sin interacción humana con el proveedor</li>
+                    <li><strong>Acceso amplio a la red:</strong> Recursos disponibles a través de estándares de red</li>
+                    <li><strong>Modelo de precios por uso:</strong> Pago solo por los recursos consumidos</li>
+                </ul>
+                
+                <h4>Ventajas Técnicas:</h4>
+                <ul>
+                    <li><strong>Flexibilidad de configuración:</strong> Elección del sistema operativo, middleware y stack tecnológico</li>
+                    <li><strong>Migración lift-and-shift:</strong> Posibilidad de mover aplicaciones existentes sin modificaciones</li>
+                    <li><strong>Control total:</strong> Acceso a nivel de sistema operativo y configuración de red</li>
+                    <li><strong>Disponibilidad:</strong> Opciones de alta disponibilidad y balanceo de carga</li>
+                </ul>
+                
+                <div class="responsibility-matrix">
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Componente</div>
+                        <div class="responsibility-cell">Usuario</div>
+                        <div class="responsibility-cell">Proveedor</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Aplicaciones</div>
+                        <div class="responsibility-cell">✓</div>
+                        <div class="responsibility-cell"></div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Datos</div>
+                        <div class="responsibility-cell">✓</div>
+                        <div class="responsibility-cell"></div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Runtime</div>
+                        <div class="responsibility-cell">✓</div>
+                        <div class="responsibility-cell"></div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Middleware</div>
+                        <div class="responsibility-cell">✓</div>
+                        <div class="responsibility-cell"></div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Sistemas Operativos</div>
+                        <div class="responsibility-cell">✓</div>
+                        <div class="responsibility-cell"></div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Virtualización</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Servidores</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Almacenamiento</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Redes</div>
+                        <div class="responsibility-cell">Configuración</div>
+                        <div class="responsibility-cell">Infraestructura</div>
+                    </div>
+                </div>
+                
+                <h4>Ejemplos de Implementación:</h4>
+                <div class="example-grid">
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/873/873107.png" alt="AWS">
+                        <div>Amazon EC2</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/732/732226.png" alt="Azure">
+                        <div>Azure VMs</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/281/281760.png" alt="Google Cloud">
+                        <div>Google Compute</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/226/226772.png" alt="IBM">
+                        <div>IBM Cloud</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5969/5969294.png" alt="Oracle">
+                        <div>Oracle Cloud</div>
+                    </div>
+                </div>
+                
+                <h4>Casos de Uso Ideales:</h4>
+                <ul>
+                    <li>Migración de centros de datos locales</li>
+                    <li>Entornos de desarrollo y pruebas</li>
+                    <li>Almacenamiento y backup en la nube</li>
+                    <li>Aplicaciones con requisitos de personalización específicos</li>
+                    <li>Cargas de trabajo impredecibles o con picos de demanda</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Slide 4: PaaS -->
+    <div class="slide" id="slide4">
+        <section>
+            <h2>PaaS – Plataforma como Servicio</h2>
+            <div class="model-card paas">
+                <img src="https://cdn-icons-png.flaticon.com/512/1086/1086741.png" alt="PaaS" class="floating">
+                
+                <h3>Definición Técnica</h3>
+                <p>PaaS proporciona un entorno de desarrollo e implementación completo en la nube, con recursos que permiten a los desarrolladores entregar desde aplicaciones simples basadas en la nube hasta aplicaciones empresariales sofisticadas. Los proveedores hospedan el hardware y software en su propia infraestructura.</p>
+                
+                <h4>Características Clave:</h4>
+                <ul>
+                    <li><strong>Entorno de desarrollo integrado:</strong> Herramientas para diseño, desarrollo, pruebas e implementación</li>
+                    <li><strong>Servicios de middleware:</strong> Incluye servidores de aplicaciones, sistemas de gestión de bases de datos, etc.</li>
+                    <li><strong>Automatización de operaciones:</strong> Escalado automático, balanceo de carga, alta disponibilidad</li>
+                    <li><strong>Integración con herramientas DevOps:</strong> CI/CD, monitoreo, logging</li>
+                </ul>
+                
+                <h4>Ventajas Técnicas:</h4>
+                <ul>
+                    <li><strong>Productividad mejorada:</strong> Los desarrolladores pueden enfocarse en el código sin administrar infraestructura</li>
+                    <li><strong>Despliegue rápido:</strong> Implementación de aplicaciones en minutos en lugar de semanas</li>
+                    <li><strong>Escalabilidad automática:</strong> La plataforma maneja el escalado según la demanda</li>
+                    <li><strong>Actualizaciones automáticas:</strong> Sin tiempo de inactividad para actualizaciones de seguridad y parches</li>
+                </ul>
+                
+                <div class="responsibility-matrix">
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Componente</div>
+                        <div class="responsibility-cell">Usuario</div>
+                        <div class="responsibility-cell">Proveedor</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Aplicaciones</div>
+                        <div class="responsibility-cell">✓</div>
+                        <div class="responsibility-cell"></div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Datos</div>
+                        <div class="responsibility-cell">✓</div>
+                        <div class="responsibility-cell"></div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Runtime</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Middleware</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Sistemas Operativos</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Virtualización</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Servidores</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Almacenamiento</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Redes</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                </div>
+                
+                <h4>Ejemplos de Implementación:</h4>
+                <div class="example-grid">
+                    <div class="example-item">
+                        <img src="https                        <img src="https://cdn-icons-png.flaticon.com/512/873/873107.png" alt="AWS">
+                        <div>AWS Elastic Beanstalk</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/732/732226.png" alt="Azure">
+                        <div>Azure App Service</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/281/281760.png" alt="Google Cloud">
+                        <div>Google App Engine</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/226/226772.png" alt="IBM">
+                        <div>IBM Cloud Foundry</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5969/5969294.png" alt="Oracle">
+                        <div>Oracle Cloud Platform</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Heroku">
+                        <div>Heroku</div>
+                    </div>
+                </div>
+                
+                <h4>Casos de Uso Ideales:</h4>
+                <ul>
+                    <li>Desarrollo ágil de aplicaciones</li>
+                    <li>API management y desarrollo de microservicios</li>
+                    <li>Internet of Things (IoT) backend</li>
+                    <li>Integración de sistemas empresariales</li>
+                    <li>Entornos de CI/CD automatizados</li>
+                </ul>
+                
+                <div class="case-study">
+                    <h3>Estudio de Caso: Migración a PaaS</h3>
+                    <p>Una empresa de medios digitales migró su plataforma de gestión de contenido de un entorno local a PaaS, logrando:</p>
+                    
+                    <div class="case-study-grid">
+                        <div class="case-study-item">
+                            <h4>Reducción de Costos</h4>
+                            <p>60% menos en gastos de infraestructura y mantenimiento</p>
+                        </div>
+                        <div class="case-study-item">
+                            <h4>Mayor Velocidad</h4>
+                            <p>Lanzamiento de nuevas características en días en lugar de semanas</p>
+                        </div>
+                        <div class="case-study-item">
+                            <h4>Escalabilidad</h4>
+                            <p>Manejo de picos de tráfico durante eventos importantes sin intervención manual</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Slide 5: SaaS -->
+    <div class="slide" id="slide5">
+        <section>
+            <h2>SaaS – Software como Servicio</h2>
+            <div class="model-card saas">
+                <img src="https://cdn-icons-png.flaticon.com/512/2933/2933245.png" alt="SaaS" class="floating">
+                
+                <h3>Definición Técnica</h3>
+                <p>SaaS es un modelo de distribución de software donde las aplicaciones están alojadas por un proveedor de servicios y puestas a disposición de los usuarios a través de Internet. Los usuarios acceden al software a través de navegadores web o aplicaciones cliente ligeras, sin necesidad de instalación o mantenimiento local.</p>
+                
+                <h4>Características Clave:</h4>
+                <ul>
+                    <li><strong>Acceso multidispositivo:</strong> Disponible desde cualquier lugar con conexión a Internet</li>
+                    <li><strong>Suscripción basada en usuarios:</strong> Modelo de pago por usuario o por uso</li>
+                    <li><strong>Actualizaciones automáticas:</strong> Nuevas características disponibles sin acción del usuario</li>
+                    <li><strong>Integración API:</strong> Conectividad con otros sistemas empresariales</li>
+                </ul>
+                
+                <h4>Ventajas Técnicas:</h4>
+                <ul>
+                    <li><strong>Cero mantenimiento:</strong> Sin necesidad de instalación, parches o actualizaciones</li>
+                    <li><strong>Acceso inmediato:</strong> Puesta en marcha en horas en lugar de meses</li>
+                    <li><strong>Escalabilidad flexible:</strong> Añadir o reducir usuarios según necesidades</li>
+                    <li><strong>Seguridad gestionada:</strong> Protección de datos y cumplimiento normativo manejado por el proveedor</li>
+                </ul>
+                
+                <div class="responsibility-matrix">
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Componente</div>
+                        <div class="responsibility-cell">Usuario</div>
+                        <div class="responsibility-cell">Proveedor</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Aplicaciones</div>
+                        <div class="responsibility-cell">Configuración</div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Datos</div>
+                        <div class="responsibility-cell">✓</div>
+                        <div class="responsibility-cell">Almacenamiento</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Runtime</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Middleware</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Sistemas Operativos</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Virtualización</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Servidores</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Almacenamiento</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                    <div class="responsibility-row">
+                        <div class="responsibility-cell">Redes</div>
+                        <div class="responsibility-cell"></div>
+                        <div class="responsibility-cell">✓</div>
+                    </div>
+                </div>
+                
+                <h4>Ejemplos de Implementación:</h4>
+                <div class="example-grid">
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/732/732220.png" alt="Microsoft">
+                        <div>Office 365</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968872.png" alt="Salesforce">
+                        <div>Salesforce</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2965/2965300.png" alt="Zoom">
+                        <div>Zoom</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2504/2504929.png" alt="Slack">
+                        <div>Slack</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2702/2702602.png" alt="Google Workspace">
+                        <div>Google Workspace</div>
+                    </div>
+                    <div class="example-item">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6124/6124998.png" alt="Dropbox">
+                        <div>Dropbox</div>
+                    </div>
+                </div>
+                
+                <h4>Casos de Uso Ideales:</h4>
+                <ul>
+                    <li>Aplicaciones empresariales estándar (CRM, ERP, correo)</li>
+                    <li>Colaboración y productividad en equipo</li>
+                    <li>Soluciones verticales para industrias específicas</li>
+                    <li>Empresas sin equipo IT dedicado</li>
+                    <li>Necesidad de acceso remoto/móvil</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Slide 6: Comparativa -->
+    <div class="slide" id="slide6">
+        <section>
+            <h2>Comparativa de Modelos</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aspecto</th>
+                        <th>IaaS</th>
+                        <th>PaaS</th>
+                        <th>SaaS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Control</strong></td>
+                        <td>Máximo control sobre infraestructura</td>
+                        <td>Control sobre aplicaciones y datos</td>
+                        <td>Mínimo control, solo configuración</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Flexibilidad</strong></td>
+                        <td>Alta (elige todo el stack)</td>
+                        <td>Media (limitado al entorno PaaS)</td>
+                        <td>Baja (usa lo que ofrece el proveedor)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mantenimiento</strong></td>
+                        <td>Usuario mantiene SO hacia arriba</td>
+                        <td>Proveedor mantiene infraestructura y plataforma</td>
+                        <td>Proveedor mantiene todo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Escalabilidad</strong></td>
+                        <td>Manual o semi-automática</td>
+                        <td>Automática en la mayoría de plataformas</td>
+                        <td>Totalmente automática</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Implementación</strong></td>
+                        <td>Semanas a meses</td>
+                        <td>Días a semanas</td>
+                        <td>Minutos a horas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Costo inicial</strong></td>
+                        <td>Moderado a alto</td>
+                        <td>Bajo a moderado</td>
+                        <td>Mínimo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Personalización</strong></td>
+                        <td>Total</td>
+                        <td>Limitada al entorno</td>
+                        <td>Mínima (solo configuración)</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>¿Cómo elegir el modelo adecuado?</h3>
+            
+            <div class="phase">
+                <div class="phase-number">1</div>
+                <div class="phase-content">
+                    <h4>Evaluar necesidades técnicas</h4>
+                    <ul>
+                        <li>¿Necesitas control total sobre el sistema operativo y middleware?</li>
+                        <li>¿Tienes requisitos específicos de compliance o seguridad?</li>
+                        <li>¿Tu aplicación requiere personalizaciones profundas?</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="phase">
+                <div class="phase-number">2</div>
+                <div class="phase-content">
+                    <h4>Considerar recursos internos</h4>
+                    <ul>
+                        <li>¿Tienes equipo especializado para gestionar infraestructura?</li>
+                        <li>¿Puedes dedicar recursos al mantenimiento y actualizaciones?</li>
+                        <li>¿Qué nivel de soporte necesitas del proveedor?</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="phase">
+                <div class="phase-number">3</div>
+                <div class="phase-content">
+                    <h4>Analizar costos a largo plazo</h4>
+                    <ul>
+                        <li>Comparar TCO (Total Cost of Ownership) entre modelos</li>
+                        <li>Considerar costos de migración y formación</li>
+                        <li>Evaluar modelos de precios (pago por uso vs. suscripción)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="phase">
+                <div class="phase-number">4</div>
+                <div class="phase-content">
+                    <h4>Planificar crecimiento futuro</h4>
+                    <ul>
+                        <li>¿Cómo escalarán tus necesidades en 3-5 años?</li>
+                        <li>¿El modelo permite integraciones con otros sistemas?</li>
+                        <li>¿Existe riesgo de vendor lock-in?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Slide 7: Tendencias y Futuro -->
+    <div class="slide" id="slide7">
+        <section>
+            <h2>Tendencias y Futuro de los Modelos Cloud</h2>
+            
+            <h3>Evolución de los Modelos Tradicionales</h3>
+            <div class="benefits-container">
+                <div class="benefit-card">
+                    <h3>Serverless Computing</h3>
+                    <p>Extensión del modelo PaaS donde los desarrolladores solo escriben código sin preocuparse por la infraestructura, incluso a nivel de runtime. Ejemplos: AWS Lambda, Azure Functions.</p>
+                </div>
+                <div class="benefit-card">
+                    <h3>Contenedores como Servicio (CaaS)</h3>
+                    <p>Modelo intermedio entre IaaS y PaaS que ofrece gestión de contenedores sin administrar los nodos subyacentes. Ejemplos: AWS ECS, Azure Container Instances.</p>
+                </div>
+                <div class="benefit-card">
+                    <h3>FaaS (Function as a Service)</h3>
+                    <p>Ejecución de funciones individuales en respuesta a eventos, escalando automáticamente a cero cuando no hay tráfico.</p>
+                </div>
+            </div>
+            
+            <h3>Nuevos Paradigmas Emergentes</h3>
+            <ul>
+                <li><strong>Edge Computing:</strong> Procesamiento más cerca del origen de datos, reduciendo latencia</li>
+                <li><strong>Quantum Computing as a Service:</strong> Acceso a computación cuántica a través de la nube</li>
+                <li><strong>AI/ML Platforms:</strong> Servicios especializados para entrenamiento e implementación de modelos de IA</li>
+                <li><strong>Hybrid/Multi-cloud:</strong> Uso combinado de múltiples proveedores y entornos locales</li>
+            </ul>
+            
+            <div class="case-study">
+                <h3>Estudio de Caso: Transformación Digital</h3>
+                <p>Un banco tradicional implementó una estrategia multi-modelo:</p>
+                
+                <div class="case-study-grid">
+                    <div class="case-study-item">
+                        <h4>IaaS</h4>
+                        <p>Para sistemas core bancarios con requisitos regulatorios estrictos</p>
+                    </div>
+                    <div class="case-study-item">
+                        <h4>PaaS</h4>
+                        <p>Para desarrollo de nuevas aplicaciones digitales y APIs</p>
+                    </div>
+                    <div class="case-study-item">
+                        <h4>SaaS</h4>
+                        <p>Para productividad (Office 365) y CRM (Salesforce)</p>
+                    </div>
+                </div>
+                
+                <p><strong>Resultado:</strong> Reducción de 40% en costos TI, lanzamiento 3x más rápido de nuevos productos digitales.</p>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Slide 8: FAQ y Recursos -->
+    <div class="slide" id="slide8">
+        <section>
+            <h2>Preguntas Frecuentes</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">¿Puedo combinar diferentes modelos de servicio?</div>
+                    <div class="faq-answer">
+                        <p>Sí, la mayoría de las empresas utilizan una combinación estratégica de modelos. Por ejemplo:</p>
+                        <ul>
+                            <li>Usar IaaS para cargas de trabajo críticas que requieren control total</li>
+                            <li>Implementar aplicaciones personalizadas en PaaS</li>
+                            <li>Adoptar SaaS para necesidades estándar como correo o CRM</li>
+                        </ul>
+                        <p>Esta aproximación se conoce como estrategia multi-cloud.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">¿Cómo garantizo la seguridad en cada modelo?</div>
+                    <div class="faq-answer">
+                        <p>La seguridad es una responsabilidad compartida:</p>
+                        <ul>
+                            <li><strong>IaaS:</strong> Proveedor asegura la infraestructura física, tú gestionas la seguridad del SO, aplicaciones y datos</li>
+                            <li><strong>PaaS:</strong> Proveedor maneja seguridad de plataforma, tú proteges el código y datos de la aplicación</li>
+                            <li><strong>SaaS:</strong> Proveedor gestiona toda la seguridad, tú controlas configuración de usuarios y acceso</li>
+                        </ul>
+                        <p>Siempre revisa los acuerdos de nivel de servicio (SLA) y certificaciones de cumplimiento del proveedor.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">¿Qué es el "vendor lock-in" y cómo evitarlo?</div>
+                    <div class="faq-answer">
+                        <p>Vendor lock-in ocurre cuando es difícil migrar de un proveedor a otro debido a dependencias tecnológicas. Para minimizarlo:</p>
+                        <ul>
+                            <li>Prefiere estándares abiertos y tecnologías portables</li>
+                            <li>En PaaS, usa contenedores (Docker) y orquestación (Kubernetes)</li>
+                            <li>Diseña arquitecturas loosely coupled</li>
+                            <li>Considera soluciones multi-cloud desde el inicio</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Recursos Adicionales</h3>
+            <ul>
+                <li><strong>Libros:</strong> "Cloud Architecture Patterns" de Bill Wilder</li>
+                <li><strong>Cursos:</strong> AWS/Azure/GCP certifications, Coursera Cloud Computing Specialization</li>
+                <li><strong>Herramientas:</strong> Cloud Adoption Framework de los principales proveedores</li>
+                <li><strong>Comunidades:</strong> Stack Overflow, Reddit r/cloudcomputing, meetups locales</li>
+            </ul>
+            
+            <div class="quiz-container">
+                <h3>Mini Quiz: ¿Qué modelo elegirías?</h3>
+                
+                <div class="quiz-question">
+                    <p>1. Una startup quiere lanzar una aplicación móvil rápidamente sin gestionar servidores:</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option">
+                            <input type="radio" name="q1" id="q1a"> <label for="q1a">IaaS</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" name="q1" id="q1b"> <label for="q1b">PaaS</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" name="q1" id="q1c"> <label for="q1c">SaaS</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>2. Una empresa financiera necesita migrar su sistema legacy con requisitos de compliance estrictos:</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option">
+                            <input type="radio" name="q2" id="q2a"> <label for="q2a">IaaS</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" name="q2" id="q2b"> <label for="q2b">PaaS</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" name="q2" id="q2c"> <label for="q2c">SaaS</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-results" id="quiz-results">
+                    <h4>Resultados:</h4>
+                    <p id="quiz-score"></p>
+                    <p id="quiz-feedback"></p>
+                </div>
+                
+                <button class="nav-button" onclick="checkQuiz()">Ver resultados</button>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Slide 9: Conclusión -->
+    <div class="slide" id="slide9">
+        <section>
+            <div class="header">
+                <h1>Conclusión</h1>
+                <p>Domina los modelos de nube para tomar decisiones estratégicas</p>
+            </div>
+            
+            <div class="benefits-container">
+                <div class="benefit-card">
+                    <h3>IaaS</h3>
+                    <p>Máximo control, ideal para migraciones lift-and-shift y cargas de trabajo personalizadas. Requiere más recursos de gestión.</p>
+                </div>
+                <div class="benefit-card">
+                    <h3>PaaS</h3>
+                    <p>Balance perfecto entre control y productividad, perfecto para desarrollo ágil de aplicaciones nativas en la nube.</p>
+                </div>
+                <div class="benefit-card">
+                    <h3>SaaS</h3>
+                    <p>Máxima simplicidad, mejor para necesidades estándar donde la personalización no es crítica.</p>
+                </div>
+            </div>
+            
+            <h3>Recomendaciones Finales</h3>
+            <ul>
+                <li>Comienza con una evaluación honesta de tus capacidades técnicas y necesidades empresariales</li>
+                <li>Considera un enfoque híbrido para diferentes cargas de trabajo</li>
+                <li>Planifica para el futuro pero empieza con pasos pequeños y medibles</li>
+                <li>Invierte en formación y cambio cultural tanto como en tecnología</li>
+            </ul>
+            
+            <footer>
+                <p>© 2023 Guía Profesional de Modelos de Nube | Actualizado Julio 2023</p>
+                <p>Para uso educativo y profesional. Iconos por Flaticon, imágenes por Unsplash.</p>
+            </footer>
+        </section>
+    </div>
+    
+    <!-- Navigation -->
+    <div class="progress-container" id="progress-indicator">
+        Slide 1 de 9
+    </div>
+    
+    <div class="nav-buttons">
+        <button class="nav-button" id="prev-btn" onclick="prevSlide()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+            </svg>
+            Anterior
+        </button>
+        <button class="nav-button" id="next-btn" onclick="nextSlide()">
+            Siguiente
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </button>
+    </div>
+    
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 9;
+        
+        function showSlide(n) {
+            // Hide all slides
+            const slides = document.getElementsByClassName('slide');
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove('active');
+            }
+            
+            // Show the selected slide
+            document.getElementById(`slide${n}`).classList.add('active');
+            
+            // Update progress indicator
+            document.getElementById('progress-indicator').textContent = `Slide ${n} de ${totalSlides}`;
+            
+            // Update button states
+            document.getElementById('prev-btn').style.display = n === 1 ? 'none' : 'flex';
+            document.getElementById('next-btn').style.display = n === totalSlides ? 'none' : 'flex';
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+        
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+        
+        function checkQuiz() {
+            const answers = {
+                q1: 'b', // PaaS
+                q2: 'a'  // IaaS
+            };
+            
+            let score = 0;
+            let userAnswers = {};
+            
+            // Check answers
+            for (const question in answers) {
+                const selectedOption = document.querySelector(`input[name="${question}"]:checked`);
+                if (selectedOption) {
+                    userAnswers[question] = selectedOption.id.replace(question, '').replace('a', '').replace('b', '').replace('c', '');
+                    if (userAnswers[question] === answers[question]) {
+                        score++;
+                    }
+                }
+            }
+            
+            // Display results
+            const resultsDiv = document.getElementById('quiz-results');
+            const scoreDiv = document.getElementById('quiz-score');
+            const feedbackDiv = document.getElementById('quiz-feedback');
+            
+            resultsDiv.style.display = 'block';
+            scoreDiv.textContent = `Puntuación: ${score} de ${Object.keys(answers).length}`;
+            
+            if (score === Object.keys(answers).length) {
+                feedbackDiv.textContent = '¡Excelente! Entiendes bien los diferentes modelos de nube.';
+            } else if (score > 0) {
+                feedbackDiv.textContent = 'Buen intento. Revisa las respuestas incorrectas para mejorar.';
+            } else {
+                feedbackDiv.textContent = 'Recomendamos repasar las características de cada modelo.';
+            }
+        }
+        
+        // Initialize FAQ functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+        
+        // Initialize first slide
+        showSlide(1);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+    </script>
+</body>
+</html>
